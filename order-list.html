@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>订单列表</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<link href="css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+		<style>
+			*{
+				-webkit-user-select:text
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">订单列表</h1>
+		</header>
+		<div class="mui-content">
+			<div id="orderList">
+				
+			</div>
+		</div>
+		<div id="dcontent" class="dcontent"></div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			var isnodata = false,
+				page = 1,
+				orderStatus,
+				payOrderId,
+				parentElem,
+				pays={},
+				mask=null,
+				title=document.getElementsByClassName('mui-title')[0],
+				loadPage;
+			
+			mui.plusReady(function() {
+				orderStatus=plus.webview.currentWebview().orderStatus;
+				if(orderStatus==0){
+	            	title.innerText='全部订单';
+	            }else if(orderStatus==1)
+	            	title.innerText='待付款订单';
+	            else if(orderStatus==2)
+	            	title.innerText='待发货订单';
+	            else if(orderStatus==3)
+	            	title.innerText='待收货订单';
+	            else if(orderStatus==4)
+	            	title.innerText='待评价订单';
+	            else if(orderStatus==5)
+	            	title.innerText='退货订单';
+				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
+				
+				loadPage(orderStatus);
+				
+				plus.payment.getChannels(function(channels){
+					var content=document.getElementById('dcontent');
+					for(var i in channels){
+						var channel=channels[i];
+						pays[channel.id]=channel;
+						var de=document.createElement('div');
+						de.setAttribute('class','custom-btn');
+						de.setAttribute('onclick','pay(this.id)');
+						de.id=channel.id;
+						de.innerText=channel.description+"支付";
+						content.appendChild(de);
+						checkServices(channel);
+					}
+				},function(e){
+					plus.nativeUI.alert("获取支付方式失败："+e.message);
+				});
+				
+			});
+			
+			function loadPage(orderStatus){
+				var w=plus.nativeUI.showWaiting('',{padlock:true});
+				mui.ajax(Host+'/json.php?c=order&a=getorders',{
+					data:{
+						'orderStatus':orderStatus
+					},
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=='true'){
+							var html='';
+					        if(data.orders.length > 0) {
+					        	for(var i=0;i<data.orders.length;i++){
+						            html+='<div class="order-info" data-id="'+data.orders[i].order_oid+'">'+
+										'<div class="item">'+
+											'<div class="order-shop">'+
+											'<a class="vshop-url" data-id="'+data.orders[i].order_oid+'">'+data.orders[i].order_oid+'</a>'+
+											'<span class="mui-pull-right">'+data.orders[i].status+'</span></div>'+
+										'</div>';
+						            	for(var j=0;j<data.orders[i].itemInfo.length;j++){
+							                html+='<div class="item">'+
+							                    '<div class="buy-goods">'+
+							                        '<a class="goods-url" data-id="'+data.orders[i].itemInfo[j].goods_id+'"><img src="'+Host+'/Public/Upload/Goods/'+data.orders[i].itemInfo[j].goods_logo+'"/></a>'+
+							                        '<p><em>¥ '+data.orders[i].itemInfo[j].goods_price+'</em><span><a class="goods-url" data-id="'+data.orders[i].itemInfo[j].goods_id+'">'+data.orders[i].itemInfo[j].goods_name+'</a></span></p>'+
+							                        '<h5><span>x '+data.orders[i].itemInfo[j].goods_nums+'</span>'+data.orders[i].itemInfo[j].goods_props+'</h5>';
+							                        if(data.orders[i].order_status == 4){
+							                        	if(data.orders[i].itemInfo[j].goods_comment){
+								                        	html += '<h5><span class="replyover" data-id="'+data.orders[i].itemInfo[j].order_id+'">已评</h5>';
+								                        }else{
+								                        	html += '<h5><span class="replygoods" data-id="'+data.orders[i].itemInfo[j].order_id+'">评价</h5>';
+								                        }
+							                        }
+							                        if(data.orders[i].order_status == 2 || data.orders[i].order_status == 3 || data.orders[i].order_status == 4){
+								                        if(data.orders[i].itemInfo[j].goods_refund != 0){
+								                        	html += '<h5><span class="showrefund" style="color:#ca0909" data-id="'+data.orders[i].itemInfo[j].order_id+'">'+data.orders[i].itemInfo[j].goods_refundstatus+'</h5>';
+								                        }else{
+								                        	html += '<h5><span class="postrefund" data-id="'+data.orders[i].itemInfo[j].order_id+'" style="color:#eee">申请退货</span></h5>';
+								                        }
+							                        }
+							                    html += '</div>'+
+							                '</div>';
+						               	}
+							            html+='<div class="item">'+
+							            	'<div class="item-text">'+
+						                    '&nbsp;<span class="mui-pull-right order-total">共'+data.orders[i].total_count+'件商品 &nbsp;&nbsp; 总价：<em>¥ '+data.orders[i].order_payment+'</em></span>'+
+							            	'</div>'+
+							            '</div>';
+							            if(data.orders[i].order_status==1){
+							            	html+='<div class="item total-m item-btn" data-amout="'+data.orders[i].order_price+'">'+
+							            		'<button class="mui-btn cancelOrder">取消订单</button>'+
+							            		'<button class="mui-btn mui-btn-negative payOrder">付款</button>'+
+							            		'<button class="mui-btn showOrder">查看订单</button>'+
+							            	'</div>';
+							            }
+							            if(data.orders[i].order_status==3){
+							            	html+='<div class="item total-m item-btn">'+
+							            		'<button class="mui-btn mui-btn-negative enterOrder">确认收货</button>'+
+							            		'<button class="mui-btn showOrder">查看订单</button>'+
+							            	'</div>';
+							            }
+							            if(data.orders[i].order_status==2 || data.orders[i].order_status==4 || data.orders[i].order_status==5){
+							            	html+='<div class="item total-m item-btn">'+
+							            		'<button class="mui-btn showOrder">查看订单</button>'+
+							            	'</div>';
+							            }
+							            
+							        html+='</div>';
+						       	}
+					            document.getElementById('orderList').innerHTML=html;
+					        }else{
+					        	html+='<div class="empty-show"><h4>暂无此类订单...</h4><button id="closeWv" class="mui-btn mui-btn-negative">去其他地方逛逛</button></div>';
+					        	document.getElementById('orderList').innerHTML=html;
+					        }
+					        
+							w.close();
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						w.close();
+						reloadWvLoad();
+					}
+				});
+			}
+			
+			function reloadPage(orderStatus){
+				loadPage(orderStatus);
+				isnodata = false;
+				page = 1;
+			}
+			
+			document.addEventListener('updateData', function() {
+				reloadPage(orderStatus);
+			});
+			
+			mui('#orderList').on('tap', '.goods-url', function() {
+				var id = this.getAttribute('data-id');
+				showProduct(id);
+			});
+			
+			mui('#orderList').on('tap', '.showOrder', function() {
+				var orderId = this.parentNode.parentNode.getAttribute('data-id');
+				
+				mui.openWindow({
+					id:'order-detail.html',
+					url:'order-detail.html',
+					extras:{
+						'orderId':orderId
+				    },
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			});
+			
+			mui('#orderList').on('tap', '.enterOrder', function() {
+				var orderId = this.parentNode.parentNode.getAttribute('data-id'),
+					btnArray = ['取消', '确认'];
+					
+				mui.confirm('请确保您已收到宝贝,再收货！', '', btnArray, function(e) {
+					if (e.index == 1) {
+				    	mui.ajax(Host+'/json.php?c=order&a=postconfirmorder',{
+							data:{
+								'ids':orderId
+							},
+							dataType:'json',
+							type:'POST',
+							timeout:10000,
+							success:function(data){
+								if(data.Success=="true"){
+									plus.nativeUI.toast('已确认收货');
+									reloadPage(orderStatus);
+									mui.fire(plus.webview.getWebviewById('user/index.html'),'updateData');
+								}else{
+									plus.nativeUI.toast('确认收货失败，请稍后重试')
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								plus.nativeUI.toast('请求失败，请检查网络')
+							}
+						});
+					}
+				});
+			});
+			
+			mui('#orderList').on('tap','.replygoods',function(){
+				var order_id = this.getAttribute('data-id');
+				mui.openWindow({
+					id:'user/comment.html',
+					url:'user/comment.html',
+					extras:{
+						'order_id':order_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow:'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			})
+			
+			mui('#orderList').on('tap','.postrefund',function(){
+				var order_id = this.getAttribute('data-id');
+				mui.openWindow({
+					id:'user/refund.html',
+					url:'user/refund.html',
+					extras:{
+						'order_id':order_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow:'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			})
+			
+			mui('#orderList').on('tap','.showrefund',function(){
+				var order_id = this.getAttribute('data-id');
+				mui.openWindow({
+					id:'user/refund-view.html',
+					url:'user/refund-view.html',
+					extras:{
+						'order_id':order_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow:'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			})
+			
+			mui('#orderList').on('tap','.replyover',function(){
+				var order_id = this.getAttribute('data-id');
+				mui.openWindow({
+					id:'user/comment-view.html',
+					url:'user/comment-view.html',
+					extras:{
+						'order_id':order_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow:'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			})
+			
+			mui('#orderList').on('tap', '.cancelOrder', function() {
+				var orderId = this.parentNode.parentNode.getAttribute('data-id'),
+					btnArray = ['取消', '确认'];
+				mui.confirm('确定取消该订单？', '', btnArray, function(e) {
+					if (e.index == 1) {
+				    	mui.ajax(Host+'/json.php?c=order&a=postcloseorder',{
+							data:{
+								'ids':orderId
+							},
+							dataType:'json',
+							type:'POST',
+							timeout:10000,
+							success:function(data){
+								if(data.Success=="true"){
+									plus.nativeUI.toast('订单取消成功');
+									reloadPage(orderStatus);
+									mui.fire(plus.webview.getWebviewById('user/index.html'),'updateData');
+								}else{
+									plus.nativeUI.toast('订单取消失败，请稍后重试')
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								plus.nativeUI.toast('订单取消失败，请检查网络')
+							}
+						});
+					}
+				});
+			});
+			mui('#orderList').on('tap', '.payOrder', function() {
+				payOrderId = this.parentNode.parentNode.getAttribute('data-id');
+				if(this.parentNode.getAttribute('data-amout')<=0){
+//					var pW=plus.nativeUI.showWaiting();
+//					mui.ajax(URL+'api/Order/GetPayOrderByIntegral?orderIds='+payOrderId,{
+//						dataType:'json',
+//						type:'get',
+//						timeout:10000,
+//						success:function(data){
+//							pW.close();
+//							if(data.Success=="true"){
+//								plus.nativeUI.alert('订单需支付金额为零，购买成功，等待发货');
+//								reloadPage(orderStatus);
+//							}else{
+//								plus.nativeUI.toast('订单支付失败，请稍后重试')
+//							}
+//						},
+//						error:function(xhr,type,errorThrown){
+//							pW.close();
+//							plus.nativeUI.toast('订单支付失败，请检查网络')
+//						}
+//					});
+					
+				}else{
+					if(!mask)
+						mask = mui.createMask(function(){document.getElementById('dcontent').className='dcontent';});
+					mask.show();
+					document.getElementById('dcontent').className='dcontent active';
+				}
+			});
+			
+			// 检测是否安装支付服务
+			function checkServices(pc){
+				if(!pc.serviceReady){
+					var txt=null;
+					switch(pc.id){
+						case "alipay":
+						txt="检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？";
+						break;
+						default:
+						txt="系统未安装“"+pc.description+"”服务，无法完成支付，是否立即安装？";
+						break;
+					}
+					plus.nativeUI.confirm(txt,function(e){
+						if(e.index==0){
+							pc.installService();
+						}
+					},pc.description);
+				}
+			}
+			
+			var wPay=null;
+			
+			var PAYSERVER=Host+'/json.php?c=payment&a=getpaymentlist';
+			// 支付
+			function pay(id){
+				if(wPay){return;}//检查是否请求订单中
+				var url=PAYSERVER;
+				if(id=='alipay'||id=='wxpay'){
+					url+= '&payid='+id;
+				}else{
+					plus.nativeUI.alert("不支持此支付通道！");
+					return;
+				}
+				wPay=plus.nativeUI.showWaiting();
+				
+				// 请求支付订单
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					switch(xhr.readyState){
+						case 4:
+						wPay.close();wPay=null;
+						if(xhr.status==200){
+							var order=xhr.responseText;
+							plus.payment.request(pays[id],order,function(result){
+								plus.nativeUI.alert("支付成功，等待卖家发货！",function(){
+									mask.close();
+									document.getElementById('dcontent').style.display='none';
+									reloadPage(orderStatus);
+								});
+							},function(e){
+								mask.close();
+								document.getElementById('dcontent').style.display='none';
+								plus.nativeUI.alert("订单支付失败，请重新支付！");
+							});
+						}else{
+							plus.nativeUI.alert("获取订单信息失败！");
+						}
+						break;
+						default:
+						break;
+					}
+				}
+				xhr.open('GET',url+'&orderid='+payOrderId);
+				xhr.send();
+			}
+		</script>
+	</body>
+
+</html>

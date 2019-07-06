@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_649063_1awuigy7ryx8ncdi.css" />
+		<style type="text/css">
+			
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+			    color: #ff0000;
+			    border-bottom: 2px solid #007aff;
+			    background: 0 0;
+			}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item {
+			    color: #ffffff;
+			}
+			.mui-slider-indicator.mui-segmented-control {
+			    background-color: #000000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<!--<div class="mui-scroll">-->
+						<a class="mui-control-item mui-active" href="#item1mobile">
+							捡漏
+						</a>
+						<a class="mui-control-item" href="#item2mobile">
+							绘画
+						</a>
+						<a class="mui-control-item" href="#item3mobile">
+							书法
+						</a>
+						<a class="mui-control-item" href="#item4mobile">
+							成交
+						</a>
+						<a class="mui-control-item switch"><i class="iconfont icon-shaixuan"></i></a>
+					<!--</div>-->
+				</div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<!--<ul class="mui-table-view" id="news1">
+									<li class="mui-table-view-cell mui-media" v-for="item in items">
+										<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+											<img class="mui-media-object mui-pull-left" :src="item.cover">
+											<div class="mui-media-body">
+												<div class="mui-ellipsis-2">{{item.title}}</div>
+											</div>
+											<div class="meta-info">
+												<div class="author">{{item.author}}</div>
+												<div class="time">{{item.time}}</div>
+											</div>
+										</a>
+									</li>
+									
+								</ul>-->
+								<ul class="work-list">
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider1.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider2.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider3.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="work-list">
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider4.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider5.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="images/slider6.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+								<!--<ul class="mui-table-view" id="news2">
+									<li class="mui-table-view-cell mui-media" v-for="item in items">
+										<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+											<img class="mui-media-object mui-pull-left" :src="item.cover">
+											<div class="mui-media-body">
+												<div class="mui-ellipsis-2">{{item.title}}</div>
+											</div>
+											<div class="meta-info">
+												<div class="author">{{item.author}}</div>
+												<div class="time">{{item.time}}</div>
+											</div>
+										</a>
+									</li>
+								</ul>-->
+							</div>
+						</div>
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="work-list">
+									<li>
+										<a href="javascript:;">
+											<img src="images/shu1.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="html/goods/detail.html">
+											<img src="images/shu2.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="images/shu3.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-comment"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+								<!--<ul class="mui-table-view" id="news3">
+									<li class="mui-table-view-cell mui-media" v-for="item in items">
+										<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+											<img class="mui-media-object mui-pull-left" :src="item.cover">
+											<div class="mui-media-body">
+												<div class="mui-ellipsis-2">{{item.title}}</div>
+											</div>
+											<div class="meta-info">
+												<div class="author">{{item.author}}</div>
+												<div class="time">{{item.time}}</div>
+											</div>
+										</a>
+									</li>
+								</ul>-->
+							</div>
+						</div>
+					</div>
+					<div id="item4mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="deal-list">
+									<li>
+										<div>
+											<div class="pr"><img src="images/shu1.jpg"><span><img src="images/already.png" alt="" /></span></div>
+											<div class="iner">
+												<div class="flex acenter between">
+													<div class="flex acenter"><strong>滨河小景</strong></div>											
+												</div>
+												<div class="flex acenter between">
+													<div class="flex acenter">晁君</div>
+													<div class="">
+														<span>￥1800</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div>
+											<div class="pr"><img src="images/shu2.jpg"><span><img src="images/already.png" alt="" /></span></div>
+											<div class="iner">
+												<div class="flex acenter between">
+													<div class="flex acenter"><strong>滨河小景</strong></div>											
+												</div>
+												<div class="flex acenter between">
+													<div class="flex acenter">晁君</div>
+													<div class="">
+														<span>￥1800</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div>
+											<div class="pr"><img src="images/shu3.jpg"><span><img src="images/already.png" alt="" /></span></div>
+											<div class="iner">
+												<div class="flex acenter between">
+													<div class="flex acenter"><strong>滨河小景</strong></div>											
+												</div>
+												<div class="flex acenter between">
+													<div class="flex acenter">晁君</div>
+													<div class="">
+														<span>￥1800</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<!--<ul class="mui-table-view" id="news3">
+									<li class="mui-table-view-cell mui-media" v-for="item in items">
+										<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+											<img class="mui-media-object mui-pull-left" :src="item.cover">
+											<div class="mui-media-body">
+												<div class="mui-ellipsis-2">{{item.title}}</div>
+											</div>
+											<div class="meta-info">
+												<div class="author">{{item.author}}</div>
+												<div class="time">{{item.time}}</div>
+											</div>
+										</a>
+									</li>
+								</ul>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="screenBox" class="screen-box">
+			<div class="screen-head border-bot">
+				<a id="cancelScreen">取消</a>
+				<h1>筛选</h1>
+				<a class="mui-right" id="enterScreen">确定</a>
+			</div>
+			<ul id="screenTerm">
+				
+				<li>
+					<dt>分类</dt>
+					<dd id='works_type' class="celllist mui-clearfix">
+						<div class="cell"><span>书法</span></div>
+						<div class="cell"><span>绘画</span></div>
+						<div class="cell"><span>雕塑</span></div>
+						<div class="cell"><span>剪纸</span></div>
+						<div class="cell"><span>瓷器</span></div>
+					</dd>
+				</li>
+				<li>
+					<dt>价格</dt>
+					<dd id='works_price' class="celllist mui-clearfix">
+						<div class="cell"><span>999以下</span></div>
+						<div class="cell"><span>4999以下</span></div>
+						<div class="cell"><span>9999以下</span></div>
+						<div class="cell"><span>10000以上</span></div>
+					</dd>
+				</li>
+				<li>
+					<dt>尺寸（单位：厘米）</dt>
+					<dd id='works_size' class="cellbiglist mui-clearfix">
+						<div class="bigcell">
+							<p>长度范围</p>
+							<div class="flex acenter">
+								<input type="number" placeholder="最小值" /><span class="mui-icon mui-icon-arrowthinright"></span> <input type="number" placeholder="最大值" />
+							</div>
+						</div>
+						<div class="bigcell">
+							<p>宽带范围</p>
+							<div class="flex acenter">
+								<input type="number" placeholder="最小值" /><span class="mui-icon mui-icon-arrowthinright"></span> <input type="number" placeholder="最大值" />
+							</div>
+						</div>
+					</dd>
+				</li>
+				<!--<li style="line-height: 100px; text-align: center;">当前搜索结果无可筛选项</li>-->
+			</ul>
+			<div class="screen-bot">
+				<button class="custom-btn-default" id="clearChoose">清除选项</button>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/util.js"></script>
+		<script src="js/vue.min.js"></script>
+		<script type="text/javascript">
+			var page1 = 1,
+				page2 = 1,
+				page3 = 1,
+				mask,
+				objectId = 0;
+			var lastId = '',
+				minId = ''; //最新新闻的id 
+			var webview_detail = null; //详情页webview
+			var titleNView = { //详情页原生导航配置
+				backgroundColor: '#f7f7f7', //导航栏背景色
+				titleText: '', //导航栏标题
+				titleColor: '#000000', //文字颜色
+				type: 'transparent', //透明渐变样式
+				autoBackButton: true, //自动绘制返回箭头
+				splitLine: { //底部分割线
+					color: '#cccccc'
+				}
+			}
+			
+			mui.init();
+			(function($) {
+				//阻尼系数
+				var deceleration = mui.os.ios?0.003:0.0009;
+				$('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration:deceleration
+				});
+				$.ready(function() {
+					//循环初始化所有下拉刷新，上拉加载。
+					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						$(pullRefreshEl).pullToRefresh({
+							down: {
+								callback: function() {
+									var self = this;
+									setTimeout(function() {
+										switch(index){
+											case 0:
+											  	page = page1;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page1 = 1;
+														news1.items = convert(rsp);
+													}
+												});
+												
+												break;
+											case 1:
+												page = page2;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													console.log(JSON.stringify(rsp));
+													if(rsp && rsp.length > 0) {
+														page2 = 1;
+														news2.items = convert(rsp);
+													}
+												});
+												
+												break;
+											case 2:
+												page = page3;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page3 = 1;
+														news3.items = convert(rsp);
+													}
+												});
+												
+												break;
+											default:
+											
+										}
+										
+										self.endPullDownToRefresh();
+									}, 1000);
+								}
+							},
+							up: {
+								callback: function() {
+									var self = this;
+									var page = '';
+									
+									setTimeout(function() {
+										switch(index){
+											case 0:
+											  	page = page1;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page1++;
+														news1.items = news1.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											case 1:
+												page = page2;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													console.log(JSON.stringify(rsp));
+													if(rsp && rsp.length > 0) {
+														page2++;
+														news2.items = news2.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											case 2:
+												page = page3;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page3++;
+														news3.items = news3.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											default:
+											
+										}
+										
+										self.endPullUpToRefresh();
+									}, 1000);
+								}
+							}
+						});
+					});
+					
+					function initializeLists(){
+						mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_alllist", {}, function(rsp) {
+							console.log(JSON.stringify(rsp));
+							if(rsp.first && rsp.first.length > 0) {
+								page1++;
+								news1.items = convert(rsp.first);
+							}
+							if(rsp.second && rsp.second.length > 0) {
+								page2++;
+								news2.items = convert(rsp.second);
+							}
+							if(rsp.third && rsp.third.length > 0) {
+								page3++;
+								news3.items = convert(rsp.third);
+							}
+						});
+					}
+					
+					initializeLists();
+				});
+			})(mui);
+			
+			mui.plusReady(function() {
+				// 创建子webview窗口 并初始化
+				var aniShow = {};
+				util.initSubpage(aniShow);
+				
+				var nview = plus.nativeObj.View.getViewById('tabBar'),
+					activePage = plus.webview.currentWebview(),
+					targetPage,
+					subpages = util.options.subpages,
+					pageW = window.innerWidth,
+					currIndex = 0;
+				
+					
+				/**
+				 * 根据判断view控件点击位置判断切换的tab
+				 */
+				nview.addEventListener('click', function(e) {
+					var clientX = e.clientX;
+					if(clientX > 0 && clientX <= parseInt(pageW * 0.25)) {
+						currIndex = 0;
+					} else if(clientX > parseInt(pageW * 0.25) && clientX <= parseInt(pageW * 0.45)) {
+						currIndex = 1;
+					} else if(clientX > parseInt(pageW * 0.45) && clientX <= parseInt(pageW * 0.8)) {
+						currIndex = 2;
+					} else {
+						currIndex = 3;
+					}
+					// 匹配对应tab窗口	
+					if(currIndex > 0) {
+						targetPage = plus.webview.getWebviewById(subpages[currIndex - 1]);
+					} else {
+						targetPage = plus.webview.currentWebview();
+					}
+
+					if(targetPage == activePage) {
+						return;
+					}
+					
+					util.toggleNview(currIndex);
+					util.changeSubpage(targetPage, activePage, aniShow);
+					activePage = targetPage;
+					
+//					if(currIndex !== 3) { 
+//						util.toggleNview(currIndex);
+//						util.changeSubpage(targetPage, activePage, aniShow);
+//						activePage = targetPage;
+//					} else {
+//						plus.webview.open('html/new-webview.html', 'new', {}, 'slide-in-right', 200);
+//					}
+				})
+				
+				//预加载详情页
+				webview_detail = mui.preload({
+					url: 'html/goods/detail.html',
+					id: 'news_detail',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4",
+						"titleNView": titleNView
+					}
+				})
+			})
+			
+			var news1 = new Vue({
+				el: '#news1',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+			
+			var news2 = new Vue({
+				el: '#news2',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+			
+			var news3 = new Vue({
+				el: '#news3',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+
+			/**
+			 * 打开新闻详情
+			 * 
+			 * @param {Object} item 当前点击的新闻对象
+			 */
+			function open_detail(item) {
+				//触发子窗口变更新闻详情
+				mui.fire(webview_detail, 'get_detail', {
+					guid: item.guid,
+					title: item.title,
+					author: item.author,
+					time: item.time,
+					cover: item.cover
+				});
+
+				//更改详情页原生导航条信息
+				titleNView.titleText = item.title;
+				webview_detail.setStyle({
+					"titleNView": titleNView
+				});
+				setTimeout(function() {
+					webview_detail.show("slide-in-right", 300);
+				}, 150);
+			}
+
+			/**
+			 * 1、将服务端返回数据，转换成前端需要的格式
+			 * 2、若服务端返回格式和前端所需格式相同，则不需要改功能
+			 * 
+			 * @param {Array} items 
+			 */
+			function convert(items) {
+				var newItems = [];
+				items.forEach(function(item) {
+					newItems.push({
+						guid: item.id,
+						title: item.name,
+						author: item.name,
+						cover: item.logo,
+						time: dateUtils.format(item.addtime)
+					});
+				});
+				return newItems;
+			}
+
+			/**
+			 * 格式化时间的辅助类，将一个时间转换成x小时前、y天前等
+			 */
+			var dateUtils = {
+				UNITS: {
+					'年': 31557600000,
+					'月': 2629800000,
+					'天': 86400000,
+					'小时': 3600000,
+					'分钟': 60000,
+					'秒': 1000
+				},
+				humanize: function(milliseconds) {
+					var humanize = '';
+					mui.each(this.UNITS, function(unit, value) {
+						if(milliseconds >= value) {
+							humanize = Math.floor(milliseconds / value) + unit + '前';
+							return false;
+						}
+						return true;
+					});
+					return humanize || '刚刚';
+				},
+				format: function(dateStr) {
+					var date = this.parse(dateStr)
+					var diff = Date.now() - date.getTime();
+					if(diff < this.UNITS['天']) {
+						return this.humanize(diff);
+					}
+
+					var _format = function(number) {
+						return(number < 10 ? ('0' + number) : number);
+					};
+					return date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date.getDay()) + '-' + _format(date.getHours()) + ':' + _format(date.getMinutes());
+				},
+				parse: function(str) { //将"yyyy-mm-dd HH:MM:ss"格式的字符串，转化为一个Date对象
+					var a = str.split(/[^0-9]/);
+					return new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+				}
+			}
+			
+			//进入详情
+			mui('#item1mobile').on('tap','li',function(){
+				plus.webview.open('html/worksDetail.html', 'new', {}, 'slide-in-right', 200);
+			});
+			
+			mui('#item2mobile').on('tap','li',function(){
+				plus.webview.open('html/worksDetail.html', 'new', {}, 'slide-in-right', 200);
+			});
+			
+			mui('#item3mobile').on('tap','li',function(){
+				plus.webview.open('html/worksDetail.html', 'new', {}, 'slide-in-right', 200);
+			});
+			
+			mui('#item4mobile').on('tap','li',function(){
+				plus.webview.open('html/worksDetail.html', 'new', {}, 'slide-in-right', 200);
+			});
+			
+			mui('.switch')[0].addEventListener('tap',function(){
+				openScreen();
+			});
+			
+			
+			mui('#cancelScreen')[0].addEventListener('tap',function(){
+				closeScreen();
+			});
+			
+			mui('#screenTerm').on('tap','li.chooseCategory',function(){
+				cate_id = this.getAttribute('data-id');
+				setTimeout(function() {
+					isnodata = false;
+					searchRun();
+					mui('#pullrefresh').pullToRefresh().refresh(true);
+				}, 1000);
+				closeScreen();
+			})
+			
+			mui('#screenTerm').on('tap','li.chooseBrands',function(){
+				brand_id = this.getAttribute('data-id');
+				setTimeout(function() {
+					isnodata = false;
+					searchRun();
+					mui('#pullrefresh').pullToRefresh().refresh(true);
+				}, 1000);
+				closeScreen();
+			})
+			
+			
+			//开启筛选页面
+			function openScreen() {
+				document.getElementById('screenBox').className = 'screen-box active';
+				if (!mask)
+					mask = mui.createMask(function() {
+						document.getElementById('screenBox').className = 'screen-box'
+					});
+				mask.show();
+			}
+			
+			//关闭筛选界面
+			function closeScreen() {
+				mask.close();
+				document.getElementById('screenBox').className = 'screen-box';
+			}
+		</script>
+	</body>
+
+</html>

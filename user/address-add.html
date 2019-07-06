@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>添加收货地址</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/mui.picker.css" rel="stylesheet" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">新增收货地址</h1>
+		</header>
+		<div class="mui-content">
+			<div class="form-list">
+				<ul>
+                    <li class="input-in"><span class="f-l">收货人</span><span class="f-r"><input type="text" id="shipTo" value="" class="input" placeholder="收货人姓名"/></li>
+					<li class="input-in"><span class="f-l">联系电话</span><span class="f-r"><input type="tel" id="phone" value="" class="input" placeholder="输入联系电话"/></li>
+                    <li class="mui-table-view-cell"><a id="showCity" class="mui-navigate-right"><span class="f-l">地区</span><span class="f-r" id="addressData">请选择地区</span></a></li>
+                    <li class="input-in"><span class="f-l">详细地址</span><span class="f-r"><input type="text" id="address" value="" class="input" placeholder="输入详细地址"/></li>
+                    <li class="certification"><a id="submitAds" class="btn">确认保存</a></li>
+				</ul>
+				
+			</div>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/mui.picker.js"></script>
+		<script src="../js/mui.poppicker.js"></script>
+		<script src="../js/Region.js"></script>
+		<script>
+			mui.init({
+				swipeBack: true
+			});
+			
+			var regionid;
+			
+			mui.plusReady(function() {
+				var cityPicker3 = new mui.PopPicker({
+					layer: 3
+				}); 
+				cityPicker3.setData(province);
+				
+				document.getElementById('showCity').addEventListener('tap',function(){
+					cityPicker3.show(function(items) {
+						document.getElementById('addressData').innerText = (items[0].text || '') + " " + (items[1].text || '') + " " + (items[2].text || '');
+						if(items[2].value==null)
+							regionid=items[1].value;
+						else
+							regionid=items[2].value;
+					});
+				},false);
+				
+			});
+			
+			document.getElementById('submitAds').addEventListener('tap',function(){
+				if(document.getElementById('address').value==''){
+					plus.nativeUI.toast('请填写详细收货地址');
+					return false;
+				}
+				
+				if(document.getElementById('phone').value==''){
+					plus.nativeUI.toast('请填写联系电话');
+					return false;
+				}
+				if(document.getElementById('shipTo').value==''){
+					plus.nativeUI.toast('请填写收货人');
+					return false;
+				}
+				if(regionid==undefined){
+					plus.nativeUI.toast('请选择地区');
+					return false;
+				}
+				var w=plus.nativeUI.showWaiting('',{padlock:true});
+				mui.ajax(Host+'/json.php?c=user&a=postaddress',{
+					data:{
+						'regionid':regionid,
+						'name':document.getElementById('shipTo').value,
+						'tel':document.getElementById('phone').value,
+						'address':document.getElementById('address').value
+					},
+					dataType:'json',
+					type:'POST',
+					timeout:10000,
+					success:function(data){
+						w.close();
+						
+						if(data.Success=="true"){
+							plus.nativeUI.toast('地址保存成功');
+							mui.fire(plus.webview.getWebviewById('user/address.html'),'updateData');
+							setTimeout(function(){
+								plus.webview.currentWebview().close();
+							},1000)
+						}else{
+							plus.nativeUI.toast('地址保存失败');
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						w.close();
+						plus.nativeUI.toast('保存失败，请检查网络')
+					}
+				});
+			});
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>个人中心</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+		<style>
+			.mui-page .mui-table-view:first-child {
+				margin-top: 15px;
+			}
+			.mui-page .mui-table-view:last-child {
+				margin-bottom: 30px;
+			}
+			.mui-table-view {
+				margin-top: 10px;
+			}
+			.table-view-combine:after {
+				height: 0;
+			}
+			.mui-col-20 .iconfont{}
+			.mui-table-view span.mui-pull-right {
+				color: #999;
+			}
+			.mui-grid-view.mui-grid-9{ background-color: #fff; margin: 0;border-top:none}
+			.mui-grid-view.mui-grid-9:after{ position: absolute; display: block;}
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell{padding: 0; border: 0;}
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell .mui-badge,.mui-table-view-chevron .mui-badge{ display: none;}
+			.mui-grid-view.mui-grid-9 .mui-media .mui-icon{font-size:24px; color: #666;-webkit-text-stroke-width: 0.3px;}
+			.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body{ font-size: 12px;margin-top:0;}
+
+			.table-view-iconlist li span{font-size: 0.89rem;vertical-align: middle;}
+			.table-view-iconlist li .iconfont{ font-size:1rem;-webkit-text-stroke-width: 0.3px;margin-right: 4px;}
+						
+			.userpnl{background: rgba(0,0,0,.3);width: 100%;height:100%;padding:10% 6%;}
+			.user-info{background-size: cover;background-position: 50% 50%; color: #000;height: 140px; text-align: center;margin-top: -1px; }
+			.user-info img{ height: 70px;float:left;border-radius: 100%;}
+			.user-info h3{ font-size: 16px; margin: 3px 0; position:relative; z-index: 3; line-height: 22px;}
+			.user-info ul{ position: relative;z-index: 2;}
+			.user-info ul li{ list-style: none; width: 46%; float: left;margin-left: 2%;padding:2% 0;background: #f00;border-radius: 3px;margin-right:1%}
+			.user-info ul li strong{font-weight: normal;float:left;font-size: 17px;color: #fff;margin-top:2px}
+			.user-info ul li span{font-size: 14px; color: #fff;margin-right:5px;float:left;width:60px;margin-left: 12px;margin-top:2px}
+			.us-bg{padding-left: 10px;width:75%;float: left;}
+			#account{color: #fff;text-shadow:1px 1px 1px #666;font-weight: bold;font-size: 18px; flex: 1;text-align: left;margin-bottom:10px;margin-left:4px}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="user-info">
+				<div class="userpnl">
+					<img id="userPhoto" src="../images/avata.jpg" />		
+					<div class="us-bg">
+						<h3 id="account">未登录</h3>
+						<ul class="mui-clearfix">
+							<li id="showFavProduct">
+								<span>收藏商品</span><strong id="FavoriteProduct" style="">0</strong>
+							</li>
+							<li id="showCallProduct">
+								<span>到货提醒</span><strong id="CallProduct">0</strong>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div>
+				<ul class="mui-table-view mui-table-view-chevron table-view-iconlist">
+					<li class="mui-table-view-cell">
+						<a id="idle" class="mui-navigate-right" onclick="showOrderList(0)">
+							<span class="view-more-text">查看全部订单<span id="AllOrders"></span></span>
+							<i class="iconfont icon-text"></i><span>我的订单</span>
+						</a>
+					</li>
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-20" onclick="showOrderList(1)">
+						<a>
+							<span class="mui-icon iconfont icon-pay"><span class="mui-badge" id="WaitingForPay"></span></span>
+							<div class="mui-media-body">待付款</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-20" onclick="showOrderList(2)">
+						<a>
+							<span class="mui-icon iconfont icon-send"><span class="mui-badge" id="WaitingForDelivery"></span></span>
+							<div class="mui-media-body">待发货</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-20" onclick="showOrderList(3)">
+						<a>
+							<span class="mui-icon iconfont icon-deliver"><span class="mui-badge" id="WaitingForRecieve"></span></span>
+							<div class="mui-media-body">待收货</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-20" onclick="showOrderList(4)">
+						<a>
+							<span class="mui-icon iconfont icon-evaluate"><span class="mui-badge" id="WaitingForComments"></span></span>
+							<div class="mui-media-body">待评价</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-20" onclick="showOrderList(5)">
+						<a>
+							<span class="mui-icon iconfont icon-refund"><span class="mui-badge" id="WaitingForRefund"></span></span>
+							<div class="mui-media-body">退货</div>
+						</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view mui-table-view-chevron table-view-iconlist">
+					<li class="mui-table-view-cell">
+						<a id="idle" class="mui-navigate-right"><i class="iconfont icon-shop"></i><span>我的商品</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="sns" class="mui-navigate-right"><i class="iconfont icon-pyq"></i><span>我的圈子</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="address" class="mui-navigate-right"><i class="iconfont icon-location"></i><span>收货地址管理</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="aboutUs" class="mui-navigate-right"><i class="iconfont icon-text"></i><span>关于我们</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="contactUs" class="mui-navigate-right"><i class="iconfont icon-message"></i><span>在线客服</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="copyRight" class="mui-navigate-right"><i class="iconfont icon-upload"></i><span>版本更新</span></a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="clearAllItem" class="mui-navigate-right"><i class="iconfont icon-delete"></i><span>清理缓存</span></a>
+					</li>
+				</ul>
+				<ul class="mui-table-view exit-box" style="margin-bottom: 20px; display: none;">
+					<li class="mui-table-view-cell" style="text-align: center;">
+						<a id='exit'>退出</a>
+					</li>
+				</ul>
+				
+			</div>
+			<a style="margin: 15px;" id='login' class="custom-btn">登录</a>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/update.js"></script>
+		<script>
+			var state={},
+				userId,
+				auths=null,
+				wgtVer=null;
+			var account = document.getElementById('account');
+			var loginbtn=document.getElementById('login');
+			
+			mui.init();
+			mui.plusReady(function() {
+				var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+				if (userState.userId && userState.userId != '') {
+					mui.ajax(Host+'/json.php?c=login&a=check',{
+						data:{
+							ids:userState.userId,
+							token:userState.token
+						},
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if(data.Success == 'false'){
+								backUser();
+								
+								account.addEventListener('tap',function(){
+									//showLogin('/');
+								});
+								
+								loginbtn.addEventListener('tap',function(){
+									window.scrollTo(0,0);
+									//showLogin('/');
+								});
+							}
+						}
+					});
+				}else{
+					account.addEventListener('tap',function(){
+						//showLogin('/');
+					});
+					
+					loginbtn.addEventListener('tap',function(){
+						window.scrollTo(0,0);
+						//showLogin('/');
+					});
+				}
+				
+			    // 获取本地应用资源版本号
+			    plus.runtime.getProperty(plus.runtime.appid,function(inf){
+			        wgtVer=inf.version;
+			    });
+			    
+			    document.getElementById('idle').addEventListener('tap',function(){
+					var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+					if (userState.userId && userState.userId != '') {
+						mui.ajax(Host+'/json.php?c=login&a=check',{
+							data:{
+								ids:userState.userId,
+								token:userState.token
+							},
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+								if(data.Success == 'true'){
+									mui.openWindow({
+										id:'idle/my_idle.html',
+										url:'../idle/my_idle.html',
+										show: {
+											autoShow:true,
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}else{
+									//showLogin('/');
+								}
+							}
+						});
+					}else{
+						//showLogin('/');
+					}
+				});
+				
+				document.getElementById('sns').addEventListener('tap',function(){
+					var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+					if (userState.userId && userState.userId != '') {
+						mui.ajax(Host+'/json.php?c=login&a=check',{
+							data:{
+								ids:userState.userId,
+								token:userState.token
+							},
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+								if(data.Success == 'true'){
+									mui.openWindow({
+										id:'sns/my_sns.html',
+										url:'../sns/my_sns.html',
+										show: {
+											autoShow:true,
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}else{
+									//showLogin('/');
+								}
+							}
+						});
+					}else{
+						//showLogin('/');
+					}
+				});
+				
+				document.getElementById('address').addEventListener('tap',function(){
+					var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+					if (userState.userId && userState.userId != '') {
+						mui.ajax(Host+'/json.php?c=login&a=check',{
+							data:{
+								ids:userState.userId,
+								token:userState.token
+							},
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+								if(data.Success == 'true'){
+									mui.openWindow({
+										id:'user/address.html',
+										url:'address.html',
+										show: {
+											autoShow:true,
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}else{
+									//showLogin('/');
+								}
+							}
+						});
+					}else{
+						//showLogin('/');
+					}
+				});
+				
+				document.getElementById('showFavProduct').addEventListener('tap',function(){
+					var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+					if (userState.userId && userState.userId != '') {
+						mui.ajax(Host+'/json.php?c=login&a=check',{
+							data:{
+								ids:userState.userId,
+								token:userState.token
+							},
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+								if(data.Success == 'true'){
+									mui.openWindow({
+										id:'user/fav.html',
+										url:'fav.html',
+										show: {
+											autoShow:true,
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}else{
+									//showLogin('/');
+								}
+							}
+						});
+					}else{
+						//showLogin('/');
+					}
+				});
+				
+				document.getElementById('showCallProduct').addEventListener('tap',function(){
+					var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+					if (userState.userId && userState.userId != '') {
+						mui.ajax(Host+'/json.php?c=login&a=check',{
+							data:{
+								ids:userState.userId,
+								token:userState.token
+							},
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+								if(data.Success == 'true'){
+									mui.openWindow({
+										id:'user/call.html',
+										url:'call.html',
+										show: {
+											autoShow:true,
+											aniShow: 'pop-in'
+										},
+										waiting: {
+											autoShow: false
+										}
+									});
+								}else{
+									//showLogin('/');
+								}
+							}
+						});
+					}else{
+						//showLogin('/');
+					}
+				});
+				
+//				document.getElementById('aboutUs').addEventListener('tap',function(){
+//					mui.openWindow({
+//						id:'user/aboutus.html',
+//						url:'aboutus.html',
+//						show: {
+//							autoShow:true,
+//							aniShow: 'pop-in'
+//						},
+//						waiting: {
+//							autoShow: false
+//						}
+//					});
+//				});
+				
+//				document.getElementById('contactUs').addEventListener('tap',function(){
+//					mui.openWindow({
+//						id:'user/contactus.html',
+//						url:'contactus.html',
+//						show: {
+//							autoShow:true,
+//							aniShow: 'pop-in'
+//						},
+//						waiting: {
+//							autoShow: false
+//						}
+//					});
+//				});
+				
+//				mui('#copyRight')[0].addEventListener('tap',function(){
+//				    update();
+//				});
+				
+				mui('#clearAllItem')[0].addEventListener('tap',function(){
+					//localStorage.clear();
+				    plus.storage.clear();
+					var num = getLengthFun();
+					if ( num == 0 ) {
+						mui.toast( "数据清除成功！" );
+					}else{
+						mui.toast( "数据清除失败！" );
+					}
+				});
+				
+				function getLengthFun(){
+					return plus.storage.getLength();
+				}
+				
+				setTimeout(function(){
+					plus.oauth.getServices( function(services){
+						auths = services;
+					})
+				},1000)
+			});
+			
+			document.addEventListener('updateData', function() {
+				getCenterAds();
+				var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+				if (userState.userId && userState.userId != '') {
+					mui.ajax(Host+'/json.php?c=login&a=check',{
+						data:{
+							ids:userState.userId,
+							token:userState.token
+						},
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if(data.Success == 'true'){
+								getUserData();
+							}else{
+								mui.toast('非常抱歉，登陆超时，请重新登陆');
+								backUser();
+								update();
+							}
+						}
+					});
+				}
+				//document.getElementById('scrollDiv').scrollTop=0;
+			});
+			
+			function getUserData(){
+				state = app.getState();
+				account.innerText = state.account;
+				document.getElementById('login').style.display='none';
+				document.getElementsByClassName('exit-box')[0].style.display='block';
+				userId=state.userId;				
+				
+				mui.ajax(Host+'/json.php?c=user&a=getuser',{
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=='true'){
+							app.whichShow(data.FavoriteProduct,'FavoriteProduct');
+							app.whichShow(data.CallProduct,'CallProduct');
+							//app.whichShow('('+data.AllOrders+')','AllOrders');
+							app.whichShow(data.WaitingForPay,'WaitingForPay');
+							app.whichShow(data.WaitingForDelivery,'WaitingForDelivery');
+							app.whichShow(data.WaitingForRecieve,'WaitingForRecieve');
+							app.whichShow(data.WaitingForComments,'WaitingForComments');
+							app.whichShow(data.WaitingForRefund,'WaitingForRefund');
+							//app.whichShow(data.Game,'Game');
+							var userPhoto=data.Photo;
+							if(!userPhoto)
+								userPhoto='../images/default-photo.png';
+							else
+								document.getElementById('userPhoto').src=userPhoto;
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						plus.nativeUI.toast('请求失败，请检查网络')
+					}
+				});
+			}
+			
+			function getCenterAds(){
+				showWaiting();
+				mui.ajax(Host+'/json.php?c=user&a=centerads',{
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=='true'){
+							if(data.img){
+								mui('.user-info')[0].style.backgroundImage = 'url('+Host+'/Public/Upload/Ads/'+data.img+')';
+							}
+						}
+						plus.nativeUI.closeWaiting();
+					},
+					error:function(xhr,type,errorThrown){
+						plus.nativeUI.toast('请求失败，请检查网络');
+						plus.nativeUI.closeWaiting();
+					}
+				});
+			}
+			
+			function showOrderList(id){
+				var userState = JSON.parse(localStorage.getItem('$state') || "{}");
+				if (userState.userId && userState.userId != '') {
+					mui.ajax(Host+'/json.php?c=login&a=check',{
+						data:{
+							ids:userState.userId,
+							token:userState.token
+						},
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if(data.Success == 'true'){
+								mui.openWindow({
+									id:'order-list.html',
+									url:'../order-list.html',
+									extras:{
+										orderStatus:id
+								    },
+									show: {
+										autoShow:true,
+										aniShow: 'pop-in'
+									},
+									waiting: {
+										autoShow: false
+									}
+								});
+							}else{
+								//showLogin('/');
+							}
+						}
+					});
+				}else{
+					//showLogin('/');
+				}
+			}
+			
+			//退出操作
+			function backUser(){				
+				mui.ajax(Host+'/json.php?c=login&a=logout',{
+					dataType:'json',
+					contentType:'application/json',
+					type:'POST',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=="true"){
+							for ( var i in auths ) {
+								var s = auths[i];
+								if ( s.authResult ) {
+									s.logout(function(e){
+										plus.nativeUI.toast( "注销登录成功！" );
+									}, function(e){
+										plus.nativeUI.toast( "注销登录失败！" );
+									});
+								}
+							}
+							app.setState({});
+							plus.webview.currentWebview().reload();
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						plus.nativeUI.toast('退出登录失败，请检查网络')
+					}
+				});
+			}
+			
+			document.getElementById('exit').addEventListener('tap', function() {
+				if (mui.os.ios) {
+					backUser();
+					return;
+				}
+				var btnArray = [{
+					title: "注销当前账号"
+				}, {
+					title: "直接关闭应用"
+				}];
+				plus.nativeUI.actionSheet({
+					cancel: "取消",
+					buttons: btnArray
+				}, function(event) {
+					var index = event.index;
+					switch (index) {
+						case 1:
+							backUser();
+							break;
+						case 2:
+							plus.runtime.quit();
+							break;
+					}
+				});
+			}, false);
+			
+		</script>
+	</body>
+
+</html>

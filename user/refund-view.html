@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>发表评价</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">退货状态</h1>
+		</header>
+		<div class="mui-content">
+			<div id="orderList">
+				
+			</div>
+			<div id="comment" class="mui-clearfix">
+				
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script>
+			mui.init();
+			
+			mui.plusReady(function(){
+				ws = plus.webview.currentWebview();
+				order_id = ws.order_id;
+				
+				loadPage();
+			});
+			
+			function loadPage(){
+				mui.ajax(Host+'/json.php?c=order&a=refunddetail',{
+					data:{
+						'ids':order_id
+					},
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=='true'){
+							var html='';
+					        
+				            html='<div class="order-info">'+
+									'<div class="item">'+
+										'<div class="order-shop">'+
+										'<a class="vshop-url" data-id="'+data.order.order_oid+'">'+data.order.order_oid+'</a>'+
+										'<span class="mui-pull-right">'+data.order.status+'</span></div>'+
+									'</div>'+
+									'<div class="item">'+
+					                    '<div class="buy-goods">'+
+					                        '<a class="goods-url" data-id="'+data.order.goods_id+'"><img src="'+Host+'/Public/Upload/Goods/thumb_'+data.order.goods_logo+'"/></a>'+
+					                        '<p><em>¥ '+data.order.goods_price+'</em><span><a class="goods-url" data-id="'+data.order.goods_id+'">'+data.order.goods_name+'</a></span></p>'+
+					                        '<h5><span>x '+data.order.goods_nums+'</span>'+data.order.goods_props+'</h5>'+
+					                    '</div>'+
+					                '</div>'+
+					        	'</div>';
+				            document.getElementById('orderList').innerHTML = html;
+				            if(data.order.refund.length > 0){
+				            	html = '';
+								for(var i=0; i<data.order.refund.length; i++){
+				            		html += '<div class="score" style="margin-bottom:15px;border:1px solid #eee;padding:10px 10px 15px 10px;position:relative;">'+
+												'<p>申请时间：'+data.order.refund[i].addtime+'</p>'+
+												'<p>退货原因：'+data.order.refund[i].types+'</p>'+
+												'<p>备注：'+data.order.refund[i].content+'</p>'+
+												'<p>进度：'+data.order.refund[i].status+'</p>';
+												if(data.order.refund[i].status_id == 3){
+													html += '<p>退款金额：￥'+data.order.refund[i].money+'</p>';
+												}
+												if(data.order.refund[i].refundtime){
+													html += '<p>反馈：'+data.order.refund[i].recontent+'</p>';
+													html += '<p>处理时间：￥'+data.order.refund[i].refundtime+'</p>';
+												}
+												html += '<p>';
+										if(data.order.refund[i].status_id > 0 && data.order.refund[i].status_id < 3){
+											html += '<span class="close_refund" data-id="'+data.order.refund[i].id+'">撤销申请</span>';
+										}else if(data.order.refund[i].status_id < 0){
+											html += '<span class="post_refund">再次提交</span>';
+										}
+									html += '</p></div>';
+					            }
+								document.getElementById('comment').innerHTML = html;
+				            }
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						reloadWvLoad();
+					}
+				})
+			}
+			
+			mui('#comment').on('tap','.post_refund',function(){
+				mui.openWindow({
+					id:'user/refund.html',
+					url:'../user/refund.html',
+					extras:{
+						'order_id':order_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow:'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			})
+			
+			mui('#comment').on('tap', '.close_refund', function() {
+				var refund_id = this.getAttribute('data-id');
+				mui.confirm('确定取消本次申请?', '', ['取消', '确认'], function(e) {
+					if (e.index == 1) {
+				    	mui.ajax(Host+'/json.php?c=order&a=postcloserefund',{
+							data:{
+								'id':refund_id
+							},
+							dataType:'json',
+							type:'POST',
+							timeout:10000,
+							success:function(data){
+								if(data.Success=="true"){
+									mui.toast('退货取消成功');
+									mui.fire(plus.webview.getWebviewById('user/index.html'),'updateData');
+									mui.fire(plus.webview.getWebviewById('order-list.html'),'updateData');
+									mui.back();
+								}else{
+									mui.toast('退货取消失败，请稍后重试')
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								mui.toast('退货取消失败，请检查网络')
+							}
+						});
+					}
+				});
+			});
+			
+			document.addEventListener('updateData', function() {
+				loadPage();
+			});
+		</script>
+	</body>
+
+</html>

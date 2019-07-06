@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>到货提醒</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+		<style>			
+			#pullrefresh {
+				top: 44px;
+				bottom: 0px;
+			}
+			.mui-android #pullrefresh {
+				margin-top: 44px;
+				bottom: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">到货提醒</h1>
+		</header>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div id="slider" class="mui-slider">
+					<div class="mui-slider-group mui-slider-loop" id="sliderImg">
+					</div>
+					<div class="mui-slider-indicator">
+					</div>
+					<div class="mui-pull-loading mui-spinner custom-loading"></div>
+				</div>
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					
+				</ul>
+			</div>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/mui.pullToRefresh.js"></script>
+		<script src="../js/mui.pullToRefresh.material.js"></script>	
+		<script src="../js/mui.lazyload.js"></script>
+		<script src="../js/mui.lazyload.img.js"></script>
+		<script>
+			var page = 1,
+				isnodata = false,
+				slider = document.getElementById('sliderImg'),
+				loadArr = document.getElementsByClassName('custom-loading'),
+				imgWidth,
+				pImgLen = 0,
+				oldImgLen,
+				loadCall;
+				
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: function() {
+							setTimeout(function() {
+								page = 1;
+								isnodata = false;
+								loadCall();
+								mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+								mui('#pullrefresh').pullRefresh().refresh(true);
+							}, 1000);
+						}
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: function() {
+							if(!isnodata){
+								page++;
+								setTimeout(function() {
+									mui.ajax(Host+'/json.php?c=user&a=call',{
+										data:{
+											'pageNum':page
+										},
+										dataType:'json',
+										type:'get',
+										success:function(data){
+											if(data.Success=='true'){
+												var html = '';
+												if (data.favs.length > 0) {
+													for(var i=0;i<data.favs.length;i++){
+														html += '<li class="mui-table-view-cell mui-media" data-id="'+data.favs[i].id+'">'+
+								                        			'<a class="mui-navigate-right">'+
+								                        			'<img class="mui-media-object mui-pull-left" data-lazyload="'+Host+'/Public/Upload/Goods/thumb_'+data.favs[i].logo+'">'+
+								                        			'<div class="mui-media-body" style="white-space:normal">'+data.favs[i].name+'<p class="mui-ellipsis">'+data.favs[i].cate_name+'</p><p class="mui-ellipsis">'+data.favs[i].props+'</p><p class="mui-ellipsis">售价：'+data.favs[i].saleprice+'</p><p class="mui-ellipsis">库存：'+data.favs[i].stock+'</p>'+
+								                        			'</div>'+
+								                        			'</a>'+
+											            		'</li>';
+										            }
+													
+													mui('.mui-table-view')[0].insertAdjacentHTML('beforeend',html);
+													
+													mui('.mui-table-view')[0].removeAttribute('data-imagelazyload');
+													mui('.mui-table-view').imageLazyload({
+														placeholder: '../images/60x60.gif'
+													});
+													
+													mui('#pullrefresh').pullRefresh().endPullupToRefresh(isnodata);
+												}
+											}else{
+												isnodata = true;
+												mui('#pullrefresh').pullRefresh().endPullupToRefresh(isnodata);
+											}
+										}
+									});
+								}, 1000);
+							}
+						}
+					}
+				}
+			});
+			
+			mui.plusReady(function() {
+				var ws=plus.webview.currentWebview();
+				ws.setStyle({scrollIndicator:'none'});//禁用滚动条
+				loadCall();
+			});
+			
+			function loadCall(){
+				page = 1;
+				if(!isnodata){
+					mui.ajax(Host+'/json.php?c=user&a=call',{
+						dataType:'json',
+						type:'get',
+						success:function(data){
+							if(data.Success=='true'){
+								var html = '';
+								if (data.favs.length > 0) {
+									for(var i=0;i<data.favs.length;i++){
+										html += '<li class="mui-table-view-cell mui-media" data-id="'+data.favs[i].id+'">'+
+				                        			'<a class="mui-navigate-right">'+
+				                        			'<img class="mui-media-object mui-pull-left" data-lazyload="'+Host+'/Public/Upload/Goods/thumb_'+data.favs[i].logo+'">'+
+				                        			'<div class="mui-media-body" style="white-space:normal">'+data.favs[i].name+'<p class="mui-ellipsis">'+data.favs[i].cate_name+'</p><p class="mui-ellipsis">'+data.favs[i].props+'</p><p class="mui-ellipsis">售价：'+data.favs[i].saleprice+'</p><p class="mui-ellipsis">库存：'+data.favs[i].stock+'</p>'+
+				                        			'</div>'+
+				                        			'</a>'+
+							            		'</li>';
+						            }
+									
+									mui('.mui-table-view')[0].innerHTML = html;
+									
+									mui('.mui-table-view')[0].removeAttribute('data-imagelazyload');
+									mui('.mui-table-view').imageLazyload({
+										placeholder: '../images/60x60.gif'
+									});
+								}else{
+									isnodata = true;
+									mui('.mui-table-view')[0].innerHTML = '';
+									//mui('#emptyShow')[0].style.display = 'block';
+								}
+							}else{
+								var html='<div class="empty-show"><h4>您还没有添加任何宝贝！</h4>';
+						        mui('.mui-table-view')[0].innerHTML=html;
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							reloadWvLoad();
+						}
+					});
+				}
+			}
+			
+			mui('.mui-table-view').on('tap','li',function () {
+				product_id = this.getAttribute('data-id');
+				
+				mui.openWindow({
+					id:'goods/show.html',
+					url:'../goods/show.html',
+					extras:{
+						product_id:product_id
+				    },
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

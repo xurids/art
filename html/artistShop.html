@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<link rel="stylesheet" href="../css/mui.min.css" />
+		<link rel="stylesheet" href="../css/style.css" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_649063_1awuigy7ryx8ncdi.css" />
+		<style type="text/css">
+			.mui-segmented-control{background: #fff;}
+			.mui-scroll-wrapper {bottom: 50px;}
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item{color: #666;background: none;}
+			.mui-slider .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {color: #559e98;background: none;}
+			.mui-slider-indicator.mui-segmented-control a span{display: block;width:2.5rem;height: 2rem;margin: 0 auto;}
+			.mui-slider-indicator.mui-segmented-control a span:nth-child(1){height: 1.8rem;}
+			.mui-slider-indicator.mui-segmented-control a span:nth-child(2) {border-bottom: 0.2rem solid #fff;line-height: 2rem;}
+			.mui-slider-indicator.mui-segmented-control a.mui-active span:nth-child(2) {border-bottom: 0.2rem solid #559e98;}
+			.mui-bar-nav~.mui-content .mui-slider.mui-fullscreen{top: 220px;}
+			
+			.mui-fullscreen .mui-segmented-control~.mui-slider-group{top: 55px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">庾正平 艺术官方网店</h1>
+			<a class="mui-pull-right"><i class="iconfont icon-share"></i></a>
+		</header>
+		<div class="mui-content">
+			<div class="artist-logo">
+				<img src="../images/artistbg.jpg" alt="" />
+				<div class="artist-info">
+					<span class="left">
+						<img src="../images/avata.jpg" alt="">
+						<img src="http://staticcdn.9imobao.com/m/images/renzheng.png?v=201710191" alt="">
+					</span>
+					<span class="right">
+						<h3>李泽钰<span>简介</span></h3>
+						<p>中国美术家协会会员</p>
+					</span>
+				</div>
+			</div>
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+						<a class="mui-control-item mui-active" href="#item1mobile">
+							<span>2</span><span>作品</span>
+						</a>
+						<a class="mui-control-item" href="#item2mobile">
+							<span>4</span><span>粉丝</span>
+						</a>
+				</div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								
+								<ul class="work-list">
+									<li>
+										<a href="html/goods/detail.html">
+											<img src="../images/slider3.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="../images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-paimaichui"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<img src="../images/slider2.jpg">
+											<div class="work-info">
+												<div class="flex acenter between">
+													<div class="mui-ellipsis-2 name">三生三世十里桃花香</div>
+													<div class="price smallw small">当前出价：￥1000</div>
+												</div>
+												<div class="flex acenter between">
+													<div class="size">35*95cm / 纸 / 2018</div>
+													<div class="time smallw small">距离结束：31小时14分</div>
+												</div>
+											</div>
+											<div class="author-info flex acenter between">
+												<div class="author-logo flex acenter"><img src="../images/avata.jpg" alt="" />晁君</div>
+												<div class="author-see">
+													<span><i class="iconfont icon-yanjing"></i>18</span>
+													<span><i class="iconfont icon-paimaichui"></i>0</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="fanlist" id="news2">
+									<li>
+										<img src="../images/avata.jpg" alt="" /><span>多彩人生</span>
+									</li>
+									<li>
+										<img src="../images/avata.jpg" alt="" /><span>多彩人生</span>
+									</li>
+									<li>
+										<img src="../images/avata.jpg" alt="" /><span>多彩人生</span>
+									</li>
+									<li>
+										<img src="../images/avata.jpg" alt="" /><span>多彩人生</span>
+									</li>
+									<!--<li class="mui-table-view-cell mui-media" v-for="item in items">
+										<a href="javascript:;" :data-guid="item.guid" @tap="open_detail(item)">
+											<img class="mui-media-object mui-pull-left" :src="item.cover">
+											<div class="mui-media-body">
+												<div class="mui-ellipsis-2">{{item.title}}</div>
+											</div>
+											<div class="meta-info">
+												<div class="author">{{item.author}}</div>
+												<div class="time">{{item.time}}</div>
+											</div>
+										</a>
+									</li>-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bottom-bar flex between acenter twins">
+				<div class="cell"><span class="iconfont icon-comment"></span><span>私聊</span></div>
+				<div class="cell"><span class="iconfont icon-like"></span><span>关注</span></div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.pullToRefresh.js"></script>
+		<script src="../js/mui.pullToRefresh.material.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/util.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			var page1 = 1,
+				page2 = 1,
+				objectId = 0;
+			var lastId = '',
+				minId = ''; //最新新闻的id 
+			var webview_detail = null; //详情页webview
+			var titleNView = { //详情页原生导航配置
+				backgroundColor: '#f7f7f7', //导航栏背景色
+				titleText: '', //导航栏标题
+				titleColor: '#000000', //文字颜色
+				type: 'transparent', //透明渐变样式
+				autoBackButton: true, //自动绘制返回箭头
+				splitLine: { //底部分割线
+					color: '#cccccc'
+				}
+			}
+			
+			mui.init();
+			(function($) {
+				//阻尼系数
+				var deceleration = mui.os.ios?0.003:0.0009;
+				$('.mui-scroll-wrapper').scroll({
+					bounce: false,
+					indicators: true, //是否显示滚动条
+					deceleration:deceleration
+				});
+				$.ready(function() {
+					//循环初始化所有下拉刷新，上拉加载。
+					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						$(pullRefreshEl).pullToRefresh({
+							down: {
+								callback: function() {
+									var self = this;
+									setTimeout(function() {
+										switch(index){
+											case 0:
+											  	page = page1;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page1 = 1;
+														news1.items = convert(rsp);
+													}
+												});
+												
+												break;
+											case 1:
+												page = page2;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													console.log(JSON.stringify(rsp));
+													if(rsp && rsp.length > 0) {
+														page2 = 1;
+														news2.items = convert(rsp);
+													}
+												});
+												
+												break;
+											case 2:
+												page = page3;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':1,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page3 = 1;
+														news3.items = convert(rsp);
+													}
+												});
+												
+												break;
+											default:
+											
+										}
+										
+										self.endPullDownToRefresh();
+									}, 1000);
+								}
+							},
+							up: {
+								callback: function() {
+									var self = this;
+									var page = '';
+									
+									setTimeout(function() {
+										switch(index){
+											case 0:
+											  	page = page1;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page1++;
+														news1.items = news1.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											case 1:
+												page = page2;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													console.log(JSON.stringify(rsp));
+													if(rsp && rsp.length > 0) {
+														page2++;
+														news2.items = news2.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											case 2:
+												page = page3;
+											  	
+												mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_list", {'page':page,'objId':index}, function(rsp) {
+													if(rsp && rsp.length > 0) {
+														page3++;
+														news3.items = news3.items.concat(convert(rsp));
+													}
+												});
+												
+												break;
+											default:
+											
+										}
+										
+										self.endPullUpToRefresh();
+									}, 1000);
+								}
+							}
+						});
+					});
+					
+					function initializeLists(){
+						mui.getJSON(Host + "/index.php?s=api&c=goods&a=goods_alllist", {}, function(rsp) {
+							console.log(JSON.stringify(rsp));
+							if(rsp.first && rsp.first.length > 0) {
+								page1++;
+								news1.items = convert(rsp.first);
+							}
+							if(rsp.second && rsp.second.length > 0) {
+								page2++;
+								news2.items = convert(rsp.second);
+							}
+							if(rsp.third && rsp.third.length > 0) {
+								page3++;
+								news3.items = convert(rsp.third);
+							}
+						});
+					}
+					
+					initializeLists();
+				});
+			})(mui);
+			//进入详情
+			mui('#item1mobile').on('tap','li',function(){
+				plus.webview.open('worksDetail.html', 'new', {}, 'slide-in-right', 200);
+			});
+			mui.plusReady(function() {
+				// 创建子webview窗口 并初始化
+				var aniShow = {};
+				util.initSubpage(aniShow);
+				
+				var nview = plus.nativeObj.View.getViewById('tabBar'),
+					activePage = plus.webview.currentWebview(),
+					targetPage,
+					subpages = util.options.subpages,
+					pageW = window.innerWidth,
+					currIndex = 0;
+				
+					
+				/**
+				 * 根据判断view控件点击位置判断切换的tab
+				 */
+				nview.addEventListener('click', function(e) {
+					var clientX = e.clientX;
+					if(clientX > 0 && clientX <= parseInt(pageW * 0.25)) {
+						currIndex = 0;
+					} else if(clientX > parseInt(pageW * 0.25) && clientX <= parseInt(pageW * 0.45)) {
+						currIndex = 1;
+					} else if(clientX > parseInt(pageW * 0.45) && clientX <= parseInt(pageW * 0.8)) {
+						currIndex = 2;
+					} else {
+						currIndex = 3;
+					}
+					// 匹配对应tab窗口	
+					if(currIndex > 0) {
+						targetPage = plus.webview.getWebviewById(subpages[currIndex - 1]);
+					} else {
+						targetPage = plus.webview.currentWebview();
+					}
+
+					if(targetPage == activePage) {
+						return;
+					}
+
+					if(currIndex !== 3) { 
+						//底部选项卡切换
+						util.toggleNview(currIndex);
+						// 子页面切换
+						util.changeSubpage(targetPage, activePage, aniShow);
+						//更新当前活跃的页面
+						activePage = targetPage;
+					} else {
+						//第四个tab 打开新窗口
+						plus.webview.open('html/new-webview.html', 'new', {}, 'slide-in-right', 200);
+					}
+				})
+				
+				//预加载详情页
+				webview_detail = mui.preload({
+					url: 'html/goods/detail.html',
+					id: 'news_detail',
+					styles: {
+						"render": "always",
+						"popGesture": "hide",
+						"bounce": "vertical",
+						"bounceBackground": "#efeff4",
+						"titleNView": titleNView
+					}
+				})
+			})
+			
+			var news1 = new Vue({
+				el: '#news1',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+			
+			var news2 = new Vue({
+				el: '#news2',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+			
+			var news3 = new Vue({
+				el: '#news3',
+				data: {
+					items: [] //列表信息流数据
+				}
+			})
+
+			/**
+			 * 打开新闻详情
+			 * 
+			 * @param {Object} item 当前点击的新闻对象
+			 */
+			function open_detail(item) {
+				//触发子窗口变更新闻详情
+				mui.fire(webview_detail, 'get_detail', {
+					guid: item.guid,
+					title: item.title,
+					author: item.author,
+					time: item.time,
+					cover: item.cover
+				});
+
+				//更改详情页原生导航条信息
+				titleNView.titleText = item.title;
+				webview_detail.setStyle({
+					"titleNView": titleNView
+				});
+				setTimeout(function() {
+					webview_detail.show("slide-in-right", 300);
+				}, 150);
+			}
+
+			/**
+			 * 1、将服务端返回数据，转换成前端需要的格式
+			 * 2、若服务端返回格式和前端所需格式相同，则不需要改功能
+			 * 
+			 * @param {Array} items 
+			 */
+			function convert(items) {
+				var newItems = [];
+				items.forEach(function(item) {
+					newItems.push({
+						guid: item.id,
+						title: item.name,
+						author: item.name,
+						cover: item.logo,
+						time: dateUtils.format(item.addtime)
+					});
+				});
+				return newItems;
+			}
+
+			/**
+			 * 格式化时间的辅助类，将一个时间转换成x小时前、y天前等
+			 */
+			var dateUtils = {
+				UNITS: {
+					'年': 31557600000,
+					'月': 2629800000,
+					'天': 86400000,
+					'小时': 3600000,
+					'分钟': 60000,
+					'秒': 1000
+				},
+				humanize: function(milliseconds) {
+					var humanize = '';
+					mui.each(this.UNITS, function(unit, value) {
+						if(milliseconds >= value) {
+							humanize = Math.floor(milliseconds / value) + unit + '前';
+							return false;
+						}
+						return true;
+					});
+					return humanize || '刚刚';
+				},
+				format: function(dateStr) {
+					var date = this.parse(dateStr)
+					var diff = Date.now() - date.getTime();
+					if(diff < this.UNITS['天']) {
+						return this.humanize(diff);
+					}
+
+					var _format = function(number) {
+						return(number < 10 ? ('0' + number) : number);
+					};
+					return date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date.getDay()) + '-' + _format(date.getHours()) + ':' + _format(date.getMinutes());
+				},
+				parse: function(str) { //将"yyyy-mm-dd HH:MM:ss"格式的字符串，转化为一个Date对象
+					var a = str.split(/[^0-9]/);
+					return new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+				}
+			}
+		</script>
+	</body>
+
+</html>

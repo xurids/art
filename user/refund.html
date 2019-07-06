@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>发表评价</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">退货申请</h1>
+		</header>
+		<div class="mui-content">
+			<div id="orderList">
+
+			</div>
+			<div id="comment" class="mui-clearfix">
+				<div class="scoremui-table-view-cell">
+					<div class="arrow">
+						<span>退货原因：</span>
+						<div class="pr">
+							<a class="mui-navigate-right">
+								<select id="types" style="color: #999;border-radius:2px;border: 1px solid #eee !important;">
+									<option value="">请选择退货类型</option>
+									<option value="0">未发货申请退款</option>
+									<option value="1">产品质量问题</option>
+									<option value="2">与商品描述不符</option>
+									<option value="3">卖家发错货</option>
+									<option value="4">其他</option>
+								</select>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="score">
+					备注：
+					<textarea id="reply" placeholder="请填写退货说明" style="font-size: 14px;"></textarea>
+				</div>
+				<button type="button" class="huifu" value="回复">回复</button>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script>
+			var order_id,
+				comment = new Array(),
+				dataInfo = new Object();
+
+			mui.init();
+
+			mui.plusReady(function() {
+				ws = plus.webview.currentWebview();
+				order_id = ws.order_id;
+
+				loadPage();
+			});
+
+			function loadPage() {
+				mui.ajax(Host + '/json.php?c=order&a=refunddetail', {
+					data: {
+						'ids': order_id
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 10000,
+					success: function(data) {
+						if(data.Success == 'true') {
+							var html = '';
+
+							html = '<div class="order-info">' +
+										'<div class="item">' +
+											'<div class="order-shop">' +
+												'<a class="vshop-url" data-id="' + data.order.order_oid + '">' + data.order.order_oid + '</a>' +
+												'<span class="mui-pull-right">' + data.order.status + '</span>'+
+											'</div>' +
+										'</div>' +
+										'<div class="item">' +
+											'<div class="buy-goods">' +
+												'<a class="goods-url" data-id="' + data.order.goods_id + '"><img src="' + Host + '/Public/Upload/Goods/thumb_' + data.order.goods_logo + '"/></a>' +
+												'<p><em>¥ ' + data.order.goods_price + '</em><span><a class="goods-url" data-id="' + data.order.goods_id + '">' + data.order.goods_name + '</a></span></p>' +
+												'<h5><span>x ' + data.order.goods_nums + '</span><span style="color:#f00">' + data.order.goods_props + '</span></h5>' +
+											'</div>' +
+										'</div>' +
+									'</div>';
+							document.getElementById('orderList').innerHTML = html;
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						reloadWvLoad();
+					}
+				})
+			}
+
+			mui('#comment').on('tap', 'button', function() {
+				var types = document.getElementById("types").value;
+				var content = document.getElementById("reply").value;
+
+				if(types == '') {
+					mui.toast('请选择退货原因');
+					return false;
+				}
+
+				mui.ajax(Host + '/json.php?c=order&a=postrefund', {
+					dataType: 'json',
+					data: {
+						'id': order_id,
+						'types': types,
+						'content': content
+					},
+					type: 'post',
+					success: function(data) {
+						if(data.Success == 'true') {
+							mui.toast('退货提交成功');
+							mui.fire(plus.webview.getWebviewById('user/refund-view.html'), 'updateData');
+							mui.fire(plus.webview.getWebviewById('user/index.html'), 'updateData');
+							mui.fire(plus.webview.getWebviewById('order-list.html'), 'updateData');
+							mui.back();
+						} else {
+							mui.toast('退货提交失败');
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						mui.toast('网络链接错误，请检查后再试')
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

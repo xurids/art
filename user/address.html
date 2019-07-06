@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>收货地址管理</title>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link href="../css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 class="mui-title" style="color:#333">收货地址</h1>
+			<a class="mui-pull-right mui-btn-link addAddress" style="color:#333">新增地址</a>
+		</header>
+			<div class="mui-content transparent">
+				<ul class="mui-table-view-chevron address-list addrlist" id="addressList">
+					
+				</ul>
+			</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script>
+			mui.init({
+				swipeBack: true
+			});
+			var ws,
+				orderTag;
+			
+			mui.plusReady(function() {
+				ws=plus.webview.currentWebview();
+				orderTag=ws.orderTag;
+				
+				loadPage();
+			});
+			
+			function loadPage(){				
+				var w=plus.nativeUI.showWaiting('',{padlock:true});
+				mui.ajax(Host+'/json.php?c=user&a=address',{
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.Success=='true'){
+							var html='';
+							if(data.addresss.length>0){
+								for(var i=0; i<data.addresss.length; i++){
+									html+='<li class="mui-table-view-cell">'+
+										'<a class="mui-navigate-right" data-id="'+data.addresss[i].id+'">'+
+											'<p><span>'+data.addresss[i].name+'</span>'+data.addresss[i].tel+'</p>'+
+											'<p><span>'+data.addresss[i].RegionFullName+'</span>'+data.addresss[i].address+'</p>'+
+											'<i class="mui-icon mui-icon-compose icon-right"></i>'+
+										'</a>'+
+									'</li>';
+	                        	}
+								document.getElementById('addressList').innerHTML=html;
+							}else{
+								html+='<div class="empty-show"><h4>暂无您的专属收货地址</h4><button class="mui-btn mui-btn-negative addAddress">新增收货地址</button></div>';
+					        	//document.getElementsByClassName('mui-content')[0].innerHTML=html;
+					        	document.getElementById('addressList').innerHTML=html;
+							}
+				            w.close();
+				            document.getElementsByClassName("mui-content")[0].className="mui-content";
+						}else{
+							w.close();
+							reloadWvLoad();
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						w.close();
+						reloadWvLoad();
+					}
+				});
+			}
+			
+			document.addEventListener('updateData', function() {
+				loadPage();
+			});
+			
+			mui('#addressList').on('tap', 'a', function() {
+				if(orderTag){
+					var newAdress=this.innerHTML,
+						newAdressId=this.getAttribute('data-id');
+					mui.fire(plus.webview.getWebviewById('order-submit.html'),'updateAdress',{
+						newAdressId:newAdressId,
+						newAdress:newAdress
+					});
+					ws.close();
+				}
+			});
+			
+			
+			mui('#addressList').on('tap', 'i', function(e) {
+				e.stopPropagation();
+				var adsId = this.parentNode.getAttribute('data-id');
+				mui.openWindow({
+					id:'address-edit.html',
+					url:'address-edit.html',
+					extras:{
+						adsId:adsId
+				    },
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			});
+			
+			mui('body').on('tap', '.addAddress', function() {
+				mui.openWindow({
+					id:'address-add.html',
+					url:'address-add.html',
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			});
+			
+		</script>
+	</body>
+
+</html>

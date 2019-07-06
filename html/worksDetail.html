@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_649063_1awuigy7ryx8ncdi.css" />
+		<style type="text/css">
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">拍卖详情</h1>
+			<a class="mui-pull-right"><i class="iconfont icon-share"></i></a>
+		</header>
+		<div class="mui-content mui-bottom-space">
+			<div class="toppic">
+				<img src="../images/slider3.jpg" data-preview-src="" data-preview-group="1">
+				<div class="top-info"><span>拍卖中 | 距离结束</span><span>71时9分40秒</span></div>
+			</div>
+			<div class="padding white">
+				<div class="flex between acenter show-price">
+					<div>当前价： <span class="red bold">￥480</span> </div>
+					<div><span><i class="iconfont icon-yanjing"></i>18</span></div>
+				</div>
+				<div class="flex between acenter show-price">
+					<div>预估价： <span>￥2400</span> </div>
+					<div><span><i class="iconfont icon-paimaichui"></i>18</span></div>
+				</div>
+			</div>
+			<div class="tips flex acenter between padding white">
+				<div class="flex acenter between">
+					<div class="flex acenter"><span class="red">起</span><span>￥480</span></div>
+					<div class="flex acenter"><span class="red">加</span><span>￥100</span></div>
+					<div class="flex acenter"><span class="red">保</span><span>￥0</span></div>
+				</div>
+				<div><span>包退</span><span>包邮</span></div>
+			</div>
+			<div class="box">
+				<div class="title flex acenter between padding">
+					<span>出价记录</span>
+					<!--<span id="enterNotes">查看全部<i class="mui-icon mui-icon-more"></i></span>-->
+				</div>
+				<ul class="price-list">
+					<li><span>158****9008</span><span>领先</span><span>04-24 22:10</span><span>￥ 58</span></li>
+					<li><span>158****9008</span><span>领先</span><span>04-24 22:10</span><span>￥ 58</span></li>
+					<li><span>158****9008</span><span>领先</span><span>04-24 22:10</span><span>￥ 58</span></li>
+					<li><span>158****9008</span><span>领先</span><span>04-24 22:10</span><span>￥ 58</span></li>
+				</ul>
+				<div class="sys-tip"><span class="mui-icon mui-icon-info"></span>温馨提示：已淘汰的竞拍者，支付的拍价会原账户退回</div>
+			</div>
+			<div class="box works-intro">
+				<div class="top">
+					<h4>叶磊《孤兰生幽园》</h4>
+					<p>拍卖作品</p>
+				</div>
+				<div class="center">
+					<div class="size">尺寸：35*66cmcm</div>
+					<div>
+						<span class="material">材质：纸本</span>
+						<span class="year">年代：2018</span>
+					</div>
+					<div class="love flex acenter"><span class="mui-icon mui-icon-star"></span><span>71</span> </div>
+				</div>
+				<div class="bottom"><span>绘画</span><span>国画</span><span>花鸟</span> </div>
+			</div>
+			<div class="box">
+				<div class="title flex acenter between padding">
+					<span>作品信息</span>
+					<span></span>
+				</div>
+				<div class="content padding">
+					小写意
+				</div>
+			</div>
+			<div class="box">
+				<div class="title flex acenter between padding">
+					<span>作者介绍</span>
+					<span></span>
+				</div>
+				<div class="content padding">
+					运城学院美术系副教授，山西省美术家协会会员，首都师范大学张立辰、吉瑞森工作室画家。	
+				</div>
+			</div>
+			<div class="box">
+				<div class="flex between acenter padding">
+					<div class="flex media">
+						<img src="../images/avata.jpg" alt="" />
+						<div class="shopper-info">
+							<h3>晁君艺术官方网店</h3>
+							<p><span>作品：<i>2</i></span><span>粉丝：<i>1</i></span></p>
+						</div>
+					</div>
+					<span class="more flex acenter" id="shopenter">进入店铺<i class="mui-icon mui-icon-more"></i></span>
+				</div>
+				<div class="content otherworks flex acenter">
+					<div class="pic"><img src="../images/slider1.jpg" alt="" /><div class="info"><span>三生三世</span><span>拍卖品</span></div></div>
+					<div class="pic"><img src="../images/slider1.jpg" alt="" /><div class="info"><span>三生三世</span><span>拍卖品</span></div></div>
+				</div>
+			</div>
+		</div>
+		<div class="bottom-bar flex between acenter">
+			<div class="flex acenter nav-subarea">
+				<div class="cell"><span class="iconfont icon-comment"></span><span>私聊</span></div>
+				<div class="cell"><span class="iconfont icon-like"></span><span>关注</span></div>
+				<div class="cell"><span class="iconfont icon-favor"></span><span>收藏</span></div>
+			</div>
+			<div class="btn-buy">付保证金</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.zoom.js"></script>
+		<script src="../js/mui.previewimage.js"></script>
+		<script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.previewImage();
+
+			function getDefaultData() {
+				return {
+					cover: '',
+					title: '',
+					author: '',
+					time: '',
+					content: ''
+				}
+			}
+
+			var vm = new Vue({
+				el: '.mui-content',
+				data: getDefaultData(),
+				methods: {
+					resetData: function() { //重置数据
+						Object.assign(this.$data, getDefaultData());
+					}
+				}
+			});
+			
+			//进入店铺
+			mui('#shopenter')[0].addEventListener('tap',function(){
+				plus.webview.open('artistShop.html', 'new', {}, 'slide-in-right', 200);
+			});
+
+			//重写返回逻辑
+			mui.back = function() {
+				plus.webview.currentWebview().hide("auto", 300);
+			}
+
+			//窗口隐藏时，重置页面数据
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener("hide", function(e) {
+					window.scrollTo(0, 0);
+					vm.resetData();
+				}, false);
+			})
+		</script>
+	</body>
+
+</html>

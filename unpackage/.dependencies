@@ -1,0 +1,18 @@
+{
+  "html/tab-webview-subpage-contact.html": {
+    "href": "html/tab-webview-subpage-contact.html",
+    "resources": [],
+    "priority": 0
+  },
+  "html/goods/detail.html": {
+    "href": "html/goods/detail.html",
+    "resources": [],
+    "priority": 2
+  },
+  "index.html": {
+    "href": "index.html",
+    "resources": [],
+    "refer": [],
+    "priority": 0
+  }
+}

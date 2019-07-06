@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no,email=no" />
+		<title>购物车提交订单页</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<link href="css/user.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://at.alicdn.com/t/font_110426_wiai3t00ggo2bj4i.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav search">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #999;margin-top: 1px;"></a>
+			<h1 id="title" class="mui-title" style="color:#333">提交订单</h1>
+		</header>
+		<div id="scrollDiv" class="scroll-div">
+			<div class="mui-content transparent">
+				<div id="orderSubmit" class="order-submit">
+					
+				</div>
+			</div>
+		</div>
+		<div class="cart-bottom transparent">
+			<p class="order-price-total">共<em id="OrderCount">0</em>件，总金额<span id="OrderAmount"></span></p>
+			<a class="submit-cart" id="submitBtn">提交订单</a>
+		</div>
+		<div id="dcontent" class="dcontent"></div>
+		
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			mui.init();
+			var cartItemId,
+				skuIdCount,
+				orderData,
+				orderUrl,
+				integral,
+				shipFee,
+				couponIds=[],
+				pays={},
+				mask,
+				payOrderId,
+				ws;
+			mui.plusReady(function() {
+				ws=plus.webview.currentWebview();
+				ws.setStyle({scrollIndicator:'none'});
+				cartItemId=ws.cartItemId;
+				skuIdCount=ws.skuIdCount;
+				var w=plus.nativeUI.showWaiting('',{padlock:true});
+				if(cartItemId!=null){
+					orderData={cartItemIds:cartItemId};
+					orderUrl='/json.php?c=order&a=getsubmitbycart';
+				}else if(skuIdCount!=null){
+					orderData=JSON.parse(skuIdCount);
+					orderUrl='/json.php?c=order&a=getsubmit';
+				}
+				mui.ajax(Host+orderUrl,{
+					dataType:'json',
+					data:orderData,
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						console.log(JSON.stringify(data));
+						if(data.Success=='true'){
+							var html='';
+							if(data.address!=null){
+								html+='<ul class="mui-table-view mui-table-view-chevron address-list" id="addressList" data-id="'+data.address.id+'">'+
+									'<li class="mui-table-view-cell">'+
+										'<a class="mui-navigate-right">'+
+											'<p><span>'+data.address.name+'</span>'+data.address.tel+'</p>'+
+											'<p><i class="mui-icon mui-icon-location"></i><span>'+data.address.city_full+' '+data.address.address+'</span></p>'+
+											'<i class="mui-icon mui-icon-arrowright icon-right"></i>'+
+										'</a>'+
+									'</li>'+
+								'</ul>';
+							}else{
+								html+='<ul class="mui-table-view mui-table-view-chevron address-list" id="addressList">'+
+									'<li class="mui-table-view-cell">'+
+										'<a class="mui-navigate-right">'+
+											'<p>暂未添加您的专属收货地址，去设置</p>'+
+											'<i class="mui-icon mui-icon-arrowright icon-right" style="top:0"></i>'+
+										'</a>'+
+									'</li>'+
+								'</ul>';
+							}
+							for(var i=0;i<data.carts.length;i++){
+					            html+='<div class="order-info">';
+					                html+='<div class="item" data-skuid="'+data.carts[i].id+'">'+
+					                    '<div class="buy-goods">'+
+					                        '<a class="goods-url" data-id="'+data.carts[i].goods_id+'"><img src="'+Host+'/Public/Upload/Goods/thumb_'+data.carts[i].goods_logo+'"/></a>'+
+					                        '<p><em>¥ '+data.carts[i].goods_price+'</em><span><a class="goods-url" data-id="'+data.carts[i].goods_id+'">'+data.carts[i].goods_name+'</a></span></p>'+
+					                        '<h5><span>x '+data.carts[i].goods_num+'</span>';
+					                        	html += data.carts[i].goods_props;
+												html+='</h5>'+
+					                    '</div>'+
+					                '</div></div>';
+					       	}
+							html+='<div class="order-info">'+
+					                    '&nbsp;<span class="mui-pull-right total">合计<em>¥ '+data.orderamount+'</em></span>'+
+					                    '<div class="item-text">'+
+						                '<span>配送方式</span>';
+						                if(data.isfreefreight){
+						                	html+='<span class="mui-pull-right">快递 &nbsp;免邮</span></div></div>';
+						                }else{
+						                	html+='<span class="mui-pull-right">快递 &nbsp;'+data.freight+'元</span></div></div>';
+						                }
+							if(data.coupon){
+								html+='<div class="order-info">'+
+					                '<div class="item-text">'+
+					                '<span>优惠券</span>'+
+					                '<span class="mui-pull-right">抵扣 &nbsp;'+data.coupon.price+'元</span></div>'+
+					            '</div>';
+							}
+							if(data.userintegrals){
+								html+='<div class="order-info">'+
+									'<div class="item">'+
+										'<div class="item-score">'+
+										    '<span>可用'+data.userintegrals+'积分抵扣<em>¥'+data.integralpermoney+'</em></span>'+
+										    '<div id="useIntegral" data-score="'+data.userintegrals+'" class="mui-switch mui-active mui-pull-right"><div class="mui-switch-handle"></div></div>'+
+										'</div>'+
+									'</div>'+
+								'</div>';
+							}
+							
+							document.getElementById('orderSubmit').innerHTML = html;
+				            
+							integral=data.userintegrals;
+							shipFee=data.freight;
+							
+							var OrderAmount=document.getElementById('OrderAmount');
+							OrderAmount.innerText='¥ '+(data.orderamount + parseInt(data.freight) - data.integralpermoney).toFixed(2);
+							document.getElementById('OrderCount').innerText=document.getElementsByClassName('buy-goods').length;
+							
+							mui('#useIntegral').switch();
+							mui('#orderSubmit').on('toggle','#useIntegral',function(event){
+								setTimeout(function() {
+									if(event.detail.isActive){
+										integral=data.UserIntegrals;
+										OrderAmount.innerText='¥ '+(data.OrderAmount-data.IntegralPerMoney).toFixed(2);
+									}else{
+										integral=0;
+										OrderAmount.innerText='¥ '+data.OrderAmount;
+									}
+								}, 50);
+							});
+							
+				            w.close();
+				            document.getElementsByClassName("mui-content")[0].className="mui-content";
+				            document.getElementsByClassName("cart-bottom")[0].className="cart-bottom";
+				        }else{
+				        	w.close();
+				        	reloadWvLoad();
+				        }
+					},
+					error:function(xhr,type,errorThrown){
+						w.close();
+						reloadWvLoad();
+					}
+				});
+				
+				plus.payment.getChannels(function(channels){
+					var content=document.getElementById('dcontent');
+					for(var i in channels){
+						var channel=channels[i];
+						pays[channel.id]=channel;
+						var de=document.createElement('div');
+						de.setAttribute('class','custom-btn');
+						de.setAttribute('onclick','pay(this.id)');
+						de.id=channel.id;
+						de.innerText=channel.description+"支付";
+						content.appendChild(de);
+						checkServices(channel);
+					}
+				},function(e){
+					plus.nativeUI.alert("获取支付方式失败："+e.message);
+				});
+				
+			});
+			
+			mui('#orderSubmit').on('tap', '.goods-url', function() {
+				var id = this.getAttribute('data-id');
+				showProduct(id);
+			});
+			
+			mui('#orderSubmit').on('tap', '.vshop-url', function() {
+				var vshopid = this.getAttribute('data-id');
+				showVshop(vshopid,'/')
+			});
+			
+			mui('#orderSubmit').on('tap', '#addressList', function() {
+				mui.openWindow({
+					id:'user/address.html',
+					url:'user/address.html',
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					extras:{
+						orderTag:'orderTag'
+				    },
+					waiting: {
+						autoShow: false
+					}
+				});
+			});
+			
+			window.addEventListener('updateAdress',function(event){
+				var addressList=document.getElementById('addressList'),
+					newAdressId = event.detail.newAdressId,
+					newAdress= event.detail.newAdress;
+				addressList.setAttribute('data-id',newAdressId);
+				addressList.innerHTML='<li class="mui-table-view-cell">'+
+					'<a class="mui-navigate-right">'+newAdress+'</a>'+
+				'</li>';
+				document.getElementsByClassName('mui-icon-compose')[0].className='mui-icon mui-icon-arrowright icon-right';
+				document.getElementsByClassName('mui-icon-arrowright')[0].previousSibling.insertAdjacentHTML('afterbegin','<i class="mui-icon mui-icon-location"></i>');
+			});
+			
+			document.getElementById('submitBtn').addEventListener('tap',function(){
+				var submitUrl,
+					submitData,
+					couponId=couponIds.join(','),
+					recieveAddressId=document.getElementById('addressList').getAttribute('data-id');
+				if(!recieveAddressId){
+					plus.nativeUI.toast('请设置收货地址');
+					return false;
+				}
+				var w=plus.nativeUI.showWaiting('',{padlock:true});
+				if(cartItemId!=null){
+					submitUrl='/json.php?c=order&a=postsubmitorderbycart';
+					submitData={
+						'cartItemIds':cartItemId,
+						'recieveAddressId':recieveAddressId,
+						'shipFee':shipFee,
+						'couponIds':couponId,
+						'integral':integral,
+					};
+				}else if(skuIdCount!=null){
+					submitUrl='/json.php?c=order&a=postsubmitorder';
+					submitData={
+						'skuIds':orderData.skuId,
+						'counts':orderData.count,
+						'recieveAddressId':recieveAddressId,
+						'shipFee':shipFee,
+						'couponIds':couponId,
+						'integral':integral,
+					};
+				}
+				
+				mui.ajax(Host+submitUrl,{
+					data:submitData,
+					dataType:'json',
+					type:'post',
+					timeout:10000,
+					success:function(data){
+						console.log(JSON.stringify(data));
+						if(data.Success=="true"){
+							plus.nativeUI.toast('订单已提交，请尽快付款');
+							if(cartItemId!=null){
+								mui.fire(plus.webview.getWebviewById('cart.html'),'updateData');
+							}								
+							payOrderId = data.orderoid;
+							if(parseFloat(document.getElementById('OrderAmount').innerText.replace('¥ ',''))<=0){
+								mui.ajax(URL+'api/Order/GetPayOrderByIntegral?orderIds='+payOrderId,{
+									dataType:'json',
+									type:'get',
+									timeout:10000,
+									success:function(data){
+										if(data.Success=="true"){
+											w.close();
+											plus.nativeUI.alert('订单需支付金额为零，购买成功，等待发货',function(){
+												openOrderList();
+											});
+											
+										}else{
+											w.close();
+											plus.nativeUI.toast('订单支付失败，请稍后重试')
+										}
+									},
+									error:function(xhr,type,errorThrown){
+										w.close();
+										plus.nativeUI.toast('订单支付失败，请检查网络')
+									}
+								});
+								
+							}else{
+								w.close();
+								if(!mask)
+									mask = mui.createMask(function(){
+										document.getElementById('dcontent').className='dcontent';
+										openOrderList();
+									});
+								mask.show();
+								document.getElementById('dcontent').className='dcontent active';
+							}
+						}else{
+							w.close();
+							plus.nativeUI.toast('提交订单失败，请稍后再试')
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						w.close();
+						plus.nativeUI.toast('提交订单失败，请检查网络')
+					}
+				});
+				
+				
+			});
+			
+			// 检测是否安装支付服务
+			function checkServices(pc){
+				if(!pc.serviceReady){
+					var txt=null;
+					switch(pc.id){
+						case "alipay":
+						txt="检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？";
+						break;
+						default:
+						txt="系统未安装“"+pc.description+"”服务，无法完成支付，是否立即安装？";
+						break;
+					}
+					plus.nativeUI.confirm(txt,function(e){
+						if(e.index==0){
+							pc.installService();
+						}
+					},pc.description);
+				}
+			}
+			
+			var wPay=null;
+			
+			var PAYSERVER=Host+'/json.php?c=payment&a=getpaymentlist';			
+			// 支付
+			function pay(id){
+				if(wPay){return;}//检查是否请求订单中
+				var url=PAYSERVER;
+				if(id=='alipay'||id=='wxpay'){
+					url+= '&payid='+id;
+				}else{
+					plus.nativeUI.alert("不支持此支付通道！");
+					return;
+				}
+				
+				wPay=plus.nativeUI.showWaiting();
+				// 请求支付订单
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					switch(xhr.readyState){
+						case 4:
+						wPay.close();wPay=null;
+						if(xhr.status==200){
+							var order=xhr.responseText;
+							plus.payment.request(pays[id],order,function(result){
+								plus.nativeUI.alert("支付成功，等待卖家发货！",function(){
+									mui.fire(plus.webview.getWebviewById('order-list.html'),'updateData');
+									mui.fire(plus.webview.getWebviewById('user/index.html'),'updateData');
+									openOrderList();
+								});
+							},function(e){
+								plus.nativeUI.alert("订单支付失败！"+e.code,function(){
+									mui.fire(plus.webview.getWebviewById('order-list.html'),'updateData');
+									mui.fire(plus.webview.getWebviewById('user/index.html'),'updateData');
+									openOrderList();
+								});
+							});
+							
+						}else{
+							plus.nativeUI.alert("获取订单信息失败！");
+						}
+						break;
+						default:
+						break;
+					}
+				}
+				xhr.open('GET',url+'&orderid='+payOrderId);
+				xhr.send();
+			}
+			
+			function openOrderList(){
+				mui.openWindow({
+					id:'order-list.html',
+					url:'order-list.html',
+					extras:{
+						orderStatus:1
+				    },
+					show: {
+						autoShow:true,
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+				var submitPage=plus.webview.getWebviewById('order-submit.html');
+				setTimeout(function(){
+					submitPage.hide();
+					submitPage.close();
+				},2000)
+			}
+			
+		</script>
+	</body>
+
+</html>
